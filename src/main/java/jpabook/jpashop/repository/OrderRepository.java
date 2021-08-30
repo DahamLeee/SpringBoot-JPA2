@@ -16,6 +16,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderRepository {
 
+    /**
+     * Repository 는 가급적 순수한 Entity 를 조회하는데 사용함. (Order 를 조회, 검색하는데 사용함) (성능 최적화를 위한 fetch join)
+     */
     private final EntityManager em;
 
     public void save(Order order) {
@@ -87,4 +90,16 @@ public class OrderRepository {
         TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); //최대1000건
         return query.getResultList();
     }
+
+    public List<Order> findAllWithMemberDelivery() {
+        // fetch join 은 적극적으로 활용해야 한다.
+        // 그러나, 동작 방식이라던지 원리를 100퍼센트 이해를 하고 실무에 적용하자
+        // 꼭 꼭 꼭 이해하고 무조건 사용하자
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class
+        ).getResultList();
+    }
+
 }
