@@ -11,6 +11,7 @@ spring:
       hibernate:
 #        show_sql: true # 운영 단계에서는 system out 으로 출력하면 안되지
         format_sql: true
+        default_batch_fetch_size: 100
 
 logging:
   level:
